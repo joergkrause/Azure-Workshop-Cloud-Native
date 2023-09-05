@@ -18,9 +18,9 @@ namespace UiService
     public static IActionResult Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = "sql/{status}")] HttpRequest req,
         [Sql(commandText: "SELECT * FROM [dbo].[Table] WHERE Status = @Status",
-                CommandType = System.Data.CommandType.Text,
-                Parameters = "@Status={status}",
-                ConnectionStringSetting = "SqlServerConnection")] IEnumerable<StorageItem> input,
+             commandType: System.Data.CommandType.Text,
+             parameters: "@Status={status}",
+             connectionStringSetting: "SqlServerConnection")] IEnumerable<StorageItem> input,
         ILogger log)
     {
       log.LogInformation("C# HTTP trigger with SQL Output Binding function processed a request.");
