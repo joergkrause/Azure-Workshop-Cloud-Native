@@ -15,5 +15,7 @@ namespace UiService
     public DateTime Created { get; set; }
 
     public int Status { get; set; }
+
+    public string Container { get; set; }
   }
 }

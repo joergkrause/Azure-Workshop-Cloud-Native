@@ -14,7 +14,7 @@ namespace UiService
       string filename,
       string extension,
       // [Blob("files/{filename}.pdf", FileAccess.Read, Connection = "AzureWebJobsStorage")] byte[] content,
-      [Queue("storage", Connection = "AzureWebJobsStorage")] ICollector<StorageItem> queueMessage,
+      [Queue("%StorageQueueName%", Connection = "AzureWebJobsStorage")] ICollector<StorageItem> queueMessage,
       ILogger log)
     {
       log.LogInformation($"C# Blob trigger function Processed blob\n Name:{filename}.{extension} \n Size: {myBlob.Length} Bytes");
@@ -24,7 +24,13 @@ namespace UiService
       myBlob.Read(blobContent, 0, (int)myBlob.Length);
       var content = System.Text.Encoding.UTF8.GetString(blobContent);
 
-      queueMessage.Add(new StorageItem { Content = content, Name = filename, Created = DateTime.UtcNow, Status = 0 });
+      queueMessage.Add(new StorageItem { 
+        Content = content, 
+        Name = filename, 
+        Created = DateTime.UtcNow, 
+        Status = 0 ,
+        Container = "jk" // Demo !!
+      });
     }
   }
 }
