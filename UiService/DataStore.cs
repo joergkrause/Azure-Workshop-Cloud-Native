@@ -28,7 +28,6 @@ namespace UiService
         Content = content, 
         Name = filename, 
         Created = DateTime.UtcNow, 
-        Status = 0 ,
         Container = "jk" // Demo !!
       });
     }
