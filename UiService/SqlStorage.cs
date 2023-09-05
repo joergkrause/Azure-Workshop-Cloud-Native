@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,16 +15,17 @@ namespace UiService
   {
     // Visit https://aka.ms/sqlbindingsoutput to learn how to use this output binding
     [FunctionName("SqlStorage")]
-    public static void Run(
-        [QueueTrigger("%StorageQueueName%", Connection = "AzureWebJobsStorage")] StorageItem myQueueItem,
-        [Sql(commandText: "SELECT [dbo].[Content] ([Id], [Priority], [Description]) FROM dbo.Content WHERE Status = @Status",
+    public static IActionResult Run(
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "sql/{status}")] HttpRequest req,
+        [Sql(commandText: "SELECT * FROM [dbo].[Table] WHERE Status = @Status",
                 CommandType = System.Data.CommandType.Text,
-                Parameters = "@Status={Status}",
-                ConnectionStringSetting = "SqlServer")] IEnumerable<StorageItem> input,
+                Parameters = "@Status={status}",
+                ConnectionStringSetting = "SqlServerConnection")] IEnumerable<StorageItem> input,
         ILogger log)
     {
       log.LogInformation("C# HTTP trigger with SQL Output Binding function processed a request.");
       // ?
+      return new OkObjectResult(JsonSerializer.Serialize(input));
 
     }
   }

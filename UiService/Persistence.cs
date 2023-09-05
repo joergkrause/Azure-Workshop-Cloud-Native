@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
@@ -10,7 +11,7 @@ namespace UiService
     [FunctionName("Persistence")]
     public static void Run(
       [QueueTrigger("%StorageQueueName%", Connection = "AzureWebJobsStorage")] StorageItem myQueueItem,
-      [CosmosDB("Storage", "{container}", PartitionKey = "/status", Connection = "CosmosDBConnection")] out dynamic document,
+      [CosmosDB("Storage", "{container}", Connection = "CosmosDBConnection")] out dynamic document,
       ILogger log)
     {
       log.LogInformation($"C# Queue trigger function processed: {myQueueItem}");
